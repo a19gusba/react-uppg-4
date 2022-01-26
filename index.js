@@ -5,6 +5,7 @@ const cors = require("cors");
 const { Int32 } = require("bson");
 const app = express()
 
+
 mongoose.connect("mongodb://localhost:27017/weatherdb", { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
     console.log("connected to database")
 })
@@ -142,8 +143,9 @@ app.get("/user", function (req, res) {
 })
 
 // Add a user
-app.get("/user/:id/:username/:email/:favlocation", function (req, res) {
-
-    let sql = `INSERT INTO user VALUES (${req.params.id}, '${req.params.username}', '${req.params.email}', '${req.params.favlocation}', null);`
+app.post("/user", express.json(), function (req, res) {
+    let sql = `INSERT INTO user VALUES (${req.body.id}, '${req.body.username}', '${req.body.email}', '${req.body.favlocation}', null);`
     db.run(sql)
+
+    res.status(201).json(req.body)
 })
